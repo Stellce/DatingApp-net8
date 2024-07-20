@@ -19,7 +19,6 @@ export class NavComponent {
   private toastr = inject(ToastrService);
 
   login(f: NgForm) {
-    console.log(f.form.value);
     this.accountService.login(f.form.value).subscribe({
       next: _ => {
         this.router.navigateByUrl("/members");
