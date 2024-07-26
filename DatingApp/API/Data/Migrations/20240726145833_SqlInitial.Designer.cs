@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240718210200_SqlInitial")]
+    [Migration("20240726145833_SqlInitial")]
     partial class SqlInitial
     {
         /// <inheritdoc />
@@ -258,6 +258,9 @@ namespace API.Data.Migrations
 
                     b.Property<int>("AppUserId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsMain")
                         .HasColumnType("bit");

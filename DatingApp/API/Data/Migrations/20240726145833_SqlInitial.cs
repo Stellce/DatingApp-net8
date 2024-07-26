@@ -244,6 +244,7 @@ namespace API.Data.Migrations
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsMain = table.Column<bool>(type: "bit", nullable: false),
                     PublicId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
                     AppUserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
