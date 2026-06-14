@@ -1,4 +1,4 @@
-﻿using API.Data;
+using API.Data;
 using API.Helpers;
 using API.Interfaces;
 using API.Services;
@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions;
 
-public static class ApllicationServiceExtensions
+public static class ApplicationServiceExtensions
 {
-    public static IServiceCollection AddAppllicationServices(this IServiceCollection services,
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services,
         IConfiguration config)
     {
         services.AddControllers();
@@ -33,3 +33,4 @@ public static class ApllicationServiceExtensions
         return services;
     }
 }
+

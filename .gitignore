@@ -482,7 +482,9 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
-DatingApp/API/appsettings.json
+
+# Local appsettings with secrets
+API/appsettings.json
 
 # ASP.NET static output / Angular build artifacts
 API/wwwroot/
