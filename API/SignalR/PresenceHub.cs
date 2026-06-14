@@ -23,7 +23,7 @@ public class PresenceHub(PresenceTracker tracker) : Hub
         if (Context.User == null) throw new HubException("Cannot get current user claim");
 
         var isOffline = await tracker.UserDisconnected(Context.User.GetUsername(), Context.ConnectionId);
-        if (isOffline) await Clients.Others.SendAsync("UserIsOfflie", Context.User?.GetUsername());
+        if (isOffline) await Clients.Others.SendAsync("UserIsOffline", Context.User?.GetUsername());
 
         await base.OnDisconnectedAsync(exception);
     }

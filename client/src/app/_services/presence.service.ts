@@ -24,13 +24,13 @@ export class PresenceService {
       .withAutomaticReconnect()
       .build();
     
-    this.hubConnection.start().catch(error => console.log(error));
+    this.hubConnection.start().catch(() => {});
 
     this.hubConnection.on('UserIsOnline', username => {
       this.onlineUsers.update(users => [...users, username]);
     });
 
-    this.hubConnection.on('UserIsOfflie', username => {
+    this.hubConnection.on('UserIsOffline', username => {
       this.onlineUsers.update(users => users.filter(x => x !== username))
     });
 
@@ -48,7 +48,7 @@ export class PresenceService {
 
   stopHubConnection() {
     if (this.hubConnection?.state === HubConnectionState.Connected) {
-      this.hubConnection.stop().catch(error => console.log(error));
+      this.hubConnection.stop().catch(() => {});
     }
   }
 }
