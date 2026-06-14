@@ -19,13 +19,10 @@
                 <li class="nav-item">
                     <a routerLink="/messages" routerLinkActive="active" class="nav-link">Messages</a>
                 </li>    
-                <li *appHasRole="['Admin', 'Moderator']" class="nav-item">
+                <li *appHasRole="['Admin']" class="nav-item">
                     <a routerLink="/admin" routerLinkActive="active" class="nav-link">Admin</a>
                 </li>    
             }
-            <li class="nav-item">
-                <a routerLink="/errors" routerLinkActive="active" class="nav-link">Errors</a>
-            </li>
         </ul>
 
             

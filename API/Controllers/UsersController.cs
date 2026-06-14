@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
- [Authorize]
-public class UsersController(IUnitOfWork unitOfWork, IMapper mapper, 
-    IPhotoService photoService) : BaseApiController
+[Authorize]
+public class UsersController(IUnitOfWork unitOfWork, IMapper mapper,
+   IPhotoService photoService) : BaseApiController
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams) 
+    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
     {
         userParams.CurrentUsername = User.GetUsername();
         var users = await unitOfWork.UserRepository.GetMembersAsync(userParams);
@@ -23,14 +23,14 @@ public class UsersController(IUnitOfWork unitOfWork, IMapper mapper,
 
         return Ok(users);
     }
-    
+
     [HttpGet("{username}")] // /api/users/id
-    public async Task<ActionResult<MemberDto>> GetUser(string username) 
+    public async Task<ActionResult<MemberDto>> GetUser(string username)
     {
         var user = await unitOfWork.UserRepository.GetMemberAsync(username);
 
         if (user == null) return NotFound();
-        
+
         return user;
     }
 
@@ -69,9 +69,9 @@ public class UsersController(IUnitOfWork unitOfWork, IMapper mapper,
 
         user.Photos.Add(photo);
 
-        if (await unitOfWork.Complete()) 
-            return CreatedAtAction(nameof(GetUser), 
-                new {username = user.UserName}, mapper.Map<PhotoDto>(photo));
+        if (await unitOfWork.Complete())
+            return CreatedAtAction(nameof(GetUser),
+                new { username = user.UserName }, mapper.Map<PhotoDto>(photo));
 
         return BadRequest("Problem adding photo");
     }
@@ -101,7 +101,7 @@ public class UsersController(IUnitOfWork unitOfWork, IMapper mapper,
     {
         var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
-        if(user == null) return BadRequest("User not found");
+        if (user == null) return BadRequest("User not found");
 
         var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
 

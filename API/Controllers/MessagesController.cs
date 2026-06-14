@@ -23,7 +23,7 @@ public class MessagesController(IUnitOfWork unitOfWork, IMapper mapper) : BaseAp
         var sender = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
         var recipient = await unitOfWork.UserRepository.GetUserByUsernameAsync(createMessageDto.RecipientUsername);
 
-        if (recipient == null || sender == null || sender.UserName == null || recipient.UserName == null) 
+        if (recipient == null || sender == null || sender.UserName == null || recipient.UserName == null)
             return BadRequest("Cannot send message at this time");
 
         var message = new Message
@@ -38,12 +38,12 @@ public class MessagesController(IUnitOfWork unitOfWork, IMapper mapper) : BaseAp
         unitOfWork.MessageRepository.AddMessage(message);
 
         if (await unitOfWork.Complete()) return Ok(mapper.Map<MessageDto>(message));
-    
+
         return BadRequest("Failed to save message");
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesForUser([FromQuery]MessageParams messageParams)
+    public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesForUser([FromQuery] MessageParams messageParams)
     {
         messageParams.Username = User.GetUsername();
 
@@ -70,18 +70,18 @@ public class MessagesController(IUnitOfWork unitOfWork, IMapper mapper) : BaseAp
         var message = await unitOfWork.MessageRepository.GetMessage(id);
 
         if (message == null) return BadRequest("Cannot delete this message");
-    
-        if (message.SenderUsername != username && message.RecipientUsername != username) 
+
+        if (message.SenderUsername != username && message.RecipientUsername != username)
             return Forbid();
 
         if (message.SenderUsername == username) message.SenderDeleted = true;
         if (message.RecipientUsername == username) message.RecipientDeleted = true;
 
-        if (message is {SenderDeleted: true, RecipientDeleted: true}) 
+        if (message is { SenderDeleted: true, RecipientDeleted: true })
         {
             unitOfWork.MessageRepository.DeleteMessage(message);
         }
-        
+
         if (await unitOfWork.Complete()) return Ok();
 
         return BadRequest("Problem deleting the message");

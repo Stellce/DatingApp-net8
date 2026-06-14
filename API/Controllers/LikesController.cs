@@ -18,7 +18,7 @@ public class LikesController(IUnitOfWork unitOfWork) : BaseApiController
 
         var existingLike = await unitOfWork.LikesRepository.GetUserLike(sourceUserId, targetUserId);
 
-        if(existingLike == null)
+        if (existingLike == null)
         {
             var like = new UserLike
             {
@@ -28,7 +28,7 @@ public class LikesController(IUnitOfWork unitOfWork) : BaseApiController
 
             unitOfWork.LikesRepository.AddLike(like);
         }
-        else 
+        else
         {
             unitOfWork.LikesRepository.DeleteLike(existingLike);
         }
@@ -45,7 +45,7 @@ public class LikesController(IUnitOfWork unitOfWork) : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUserLikes([FromQuery]LikesParams likesParams)
+    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUserLikes([FromQuery] LikesParams likesParams)
     {
         likesParams.UserId = User.GetUserId();
         var users = await unitOfWork.LikesRepository.GetUserLikes(likesParams);

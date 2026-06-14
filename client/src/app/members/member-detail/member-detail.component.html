@@ -2,7 +2,7 @@
     <div class="col-4">
         <div class="card">
             <img 
-                [src]="member.photoUrl || './assets/user'" 
+                [src]="member.photoUrl || './assets/user.png'" 
                 [alt]="member.knownAs"
                 class="card-img img-thumbnail"
             >
@@ -31,7 +31,7 @@
             </div>
             <div class="card-footer">
                 <div class="btn-group d-flex">
-                    <button class="btn btn-primary">Like</button>
+                    <button (click)="onLike()" [class]="hasLiked() ? 'btn-secondary' : 'btn-primary'" class="btn">Like</button>
                     <button (click)="selectTab('Messages')" class="btn btn-success">Message</button>
                 </div>   
             </div>
@@ -39,22 +39,22 @@
     </div>
     <div class="col-8">
         <tabset class="member-tabset" #memberTabs>
-            <tab heading="About {{member.knownAs}}" (selectTab)="onTabActivated($event)">
+            <tab heading="About {{member.knownAs}}" (selectTab)="onTabActivated($event)" class="p-4">
                 <h4>Description</h4>
                 <p>{{member.introduction}}</p>
                 <h4>Looking for</h4>
                 <p>{{member.lookingFor}}</p>
             </tab>
-            <tab heading="Iterests">
-                <h4>Iterests</h4>
+            <tab heading="Interests" class="p-4">
+                <h4>Interests</h4>
                 <p>{{member.interests}}</p>
             </tab>
-            <tab heading="Photos" #photoTab="tab" (selectTab)="onTabActivated($event)">
+            <tab heading="Photos" class="p-4" #photoTab="tab" (selectTab)="onTabActivated($event)">
                 @if(photoTab.active) {
                     <gallery 
                         [items]="images" 
                         [itemAutosize]="true"
-                        class="gallery"
+                        class="member-gallery"
                     ></gallery>
                 }
             </tab>

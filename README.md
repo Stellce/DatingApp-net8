@@ -164,3 +164,33 @@ The Angular production build is generated into `API/wwwroot` so the ASP.NET Core
 ## Status
 
 This is a portfolio project created to demonstrate full-stack development with .NET 8, Angular, SQL Server, JWT authentication and SignalR. It is intended for learning and portfolio presentation, not as a production dating platform.
+
+## Screenshots
+
+### Home
+
+![Home page](docs/screenshots/01-home.jpeg)
+
+### Members
+
+![Members page](docs/screenshots/02-members.jpeg)
+
+### Profile
+
+![Profile page](docs/screenshots/03-profile.jpeg)
+
+### Messaging
+
+![Messaging page](docs/screenshots/04-messages.jpeg)
+
+### Edit-profile
+
+![Edit profile page](docs/screenshots/05-edit-profile.jpeg)
+
+### Photo upload
+
+![Edit photos upload page](docs/screenshots/06-edit-photos-upload.jpeg)
+
+### Admin Role Management
+
+![Admin role management page](docs/screenshots/07-admin-roles.jpeg)

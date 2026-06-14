@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-public class AccountController(UserManager<AppUser> userManager, ITokenService tokenService, 
+public class AccountController(UserManager<AppUser> userManager, ITokenService tokenService,
     IMapper mapper) : BaseApiController
 {
     [HttpPost("register")]
@@ -22,7 +22,7 @@ public class AccountController(UserManager<AppUser> userManager, ITokenService t
 
         var result = await userManager.CreateAsync(user, registerDto.Password);
 
-        if (!result.Succeeded) return BadRequest(result.Errors);
+        if (!result.Succeeded) return BadRequest(result.Errors.Select(e => e.Description));
 
         return new UserDto
         {
@@ -34,13 +34,17 @@ public class AccountController(UserManager<AppUser> userManager, ITokenService t
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<UserDto>> Login(LoginDto logiDto)
+    public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = await userManager.Users
             .Include(p => p.Photos)
-            .FirstOrDefaultAsync(x => 
-                x.NormalizedUserName == logiDto.Username.ToUpper());
-        if (user == null || user.UserName == null) return Unauthorized("Invalid username");
+            .FirstOrDefaultAsync(x => x.NormalizedUserName == loginDto.Username.ToUpper());
+
+        if (user == null || user.UserName == null) return Unauthorized("Invalid username or password");
+
+        var result = await userManager.CheckPasswordAsync(user, loginDto.Password);
+
+        if (!result) return Unauthorized("Invalid username or password");
 
         return new UserDto
         {

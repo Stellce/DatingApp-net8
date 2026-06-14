@@ -44,8 +44,8 @@ public class PresenceTracker
 
     public Task<string[]> GetOnlineUsers()
     {
-        string [] onlineUsers;
-        lock(OnlineUsers)
+        string[] onlineUsers;
+        lock (OnlineUsers)
         {
             onlineUsers = OnlineUsers.OrderBy(k => k.Key).Select(k => k.Key).ToArray();
         }
@@ -59,12 +59,13 @@ public class PresenceTracker
 
         if (OnlineUsers.TryGetValue(username, out var connections))
         {
-            lock(connections)
+            lock (connections)
             {
                 connectionIds = connections.ToList();
             }
         }
-        else {
+        else
+        {
             connectionIds = [];
         }
 

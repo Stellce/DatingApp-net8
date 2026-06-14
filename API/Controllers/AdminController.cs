@@ -43,16 +43,9 @@ public class AdminController(UserManager<AppUser> userManager) : BaseApiControll
         if (!result.Succeeded) return BadRequest("Failed to add to roles");
 
         result = await userManager.RemoveFromRolesAsync(user, userRoles.Except(selectedRoles));
-    
+
         if (!result.Succeeded) return BadRequest("Failed to remove from roles");
 
         return Ok(await userManager.GetRolesAsync(user));
-    }
-
-    [Authorize(Policy = "ModeratePhotoRole")]
-    [HttpGet("photos-to-moderate")]
-    public ActionResult GetPhotosForModeration()
-    {
-        return Ok("Admins or moderators can see this");
     }
 }

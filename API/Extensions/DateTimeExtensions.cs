@@ -10,6 +10,6 @@ public static class DateTimeExtensions
 
         if (dob > today.AddYears(-age)) age--;
 
-        return age; 
+        return age;
     }
 }

@@ -15,11 +15,11 @@ public class Seed
 
         var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
 
-        var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true};
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         var users = JsonSerializer.Deserialize<List<AppUser>>(userData, options);
-    
-        if(users == null) return;
+
+        if (users == null) return;
 
         var roles = new List<AppRole>
         {

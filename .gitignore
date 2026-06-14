@@ -488,3 +488,9 @@ API/appsettings.json
 
 # ASP.NET static output / Angular build artifacts
 API/wwwroot/
+
+# Angular cache
+client/.angular/
+
+# Local archives
+*.zip

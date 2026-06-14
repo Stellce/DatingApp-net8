@@ -2,7 +2,7 @@
 
 namespace API.Data;
 
-public class UnitOfWork(DataContext context, IUserRepository userRepository, 
+public class UnitOfWork(DataContext context, IUserRepository userRepository,
     IMessageRepository messageRepository, ILikesRepository likesRepository) : IUnitOfWork
 {
     public IUserRepository UserRepository => userRepository;

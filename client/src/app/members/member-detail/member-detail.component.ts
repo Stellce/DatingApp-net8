@@ -1,16 +1,16 @@
-import { Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Member } from '../../_models/member.model';
 import { TabDirective, TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs';
 import { GalleryItem, GalleryModule, ImageItem } from 'ng-gallery';
-import { TimeagoModule, TimeagoPipe } from 'ngx-timeago';
+import { TimeagoModule } from 'ngx-timeago';
 import { DatePipe } from '@angular/common';
 import { MemberMessagesComponent } from "../member-messages/member-messages.component";
-import { Message } from '../../_models/message.model';
 import { MessageService } from '../../_services/message.service';
 import { PresenceService } from '../../_services/presence.service';
 import { AccountService } from '../../_services/account.service';
 import { HubConnectionState } from '@microsoft/signalr';
+import { LikesService } from '../../_services/likes.service';
 
 @Component({
   selector: 'app-member-detail',
@@ -21,6 +21,7 @@ import { HubConnectionState } from '@microsoft/signalr';
 })
 export class MemberDetailComponent implements OnInit, OnDestroy {
   memberTabs = viewChild.required<TabsetComponent>('memberTabs');
+  likesService = inject(LikesService);
   private messageService = inject(MessageService);
   private accountService = inject(AccountService);
   presenceService = inject(PresenceService);
@@ -29,6 +30,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   member: Member = {} as Member;
   images: GalleryItem[] = [];
   activeTab?: TabDirective;
+  hasLiked = computed(() => this.likesService.likeIds().includes(this.member.id));
 
   ngOnInit(): void {
     this.route.data.subscribe({
@@ -82,6 +84,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     } else {
       this.messageService.stopHubConnection();
     }
+  }
+
+  onLike() {
+    this.likesService.toggleLike(this.member.id).subscribe({
+      next: () => this.likesService.getLikeIds()
+    });
   }
 
   ngOnDestroy(): void {

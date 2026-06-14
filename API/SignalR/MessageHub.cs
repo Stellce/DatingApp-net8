@@ -15,14 +15,14 @@ public class MessageHub(IUnitOfWork unitOfWork, IMapper mapper, IHubContext<Pres
         var httpContext = Context.GetHttpContext();
         var otherUser = httpContext?.Request.Query["user"];
 
-        if (Context.User == null || string.IsNullOrEmpty(otherUser)) 
+        if (Context.User == null || string.IsNullOrEmpty(otherUser))
             throw new Exception("Cannot join group");
         var groupName = GetGroupName(Context.User.GetUsername(), otherUser);
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         var group = await AddToGroup(groupName);
 
         await Clients.Group(groupName).SendAsync("UpdatedGroup", group);
-        
+
         var messages = await unitOfWork.MessageRepository.GetMessageThread(Context.User.GetUsername(), otherUser!);
 
         if (unitOfWork.HasChanges()) await unitOfWork.Complete();
@@ -47,7 +47,7 @@ public class MessageHub(IUnitOfWork unitOfWork, IMapper mapper, IHubContext<Pres
         var sender = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
         var recipient = await unitOfWork.UserRepository.GetUserByUsernameAsync(createMessageDto.RecipientUsername);
 
-        if (recipient == null || sender == null || sender.UserName == null || recipient.UserName == null) 
+        if (recipient == null || sender == null || sender.UserName == null || recipient.UserName == null)
             throw new HubException("Cannot send message at this time");
 
         var message = new Message
@@ -71,16 +71,14 @@ public class MessageHub(IUnitOfWork unitOfWork, IMapper mapper, IHubContext<Pres
             var connections = await PresenceTracker.GetConnectionsForUser(recipient.UserName);
             if (connections != null && connections?.Count != null)
             {
-                await presenceHub.Clients.Clients(connections).SendAsync("NewMessageReceived", 
-                    new {username = sender.UserName, KnownAs = sender.KnownAs});
+                await presenceHub.Clients.Clients(connections).SendAsync("NewMessageReceived",
+                    new { username = sender.UserName, KnownAs = sender.KnownAs });
             }
         }
 
         unitOfWork.MessageRepository.AddMessage(message);
 
-        unitOfWork.MessageRepository.AddMessage(message);
-
-        if (await unitOfWork.Complete()) 
+        if (await unitOfWork.Complete())
         {
             await Clients.Group(groupName).SendAsync("NewMessage", mapper.Map<MessageDto>(message));
         }
@@ -90,11 +88,11 @@ public class MessageHub(IUnitOfWork unitOfWork, IMapper mapper, IHubContext<Pres
     {
         var username = Context.User?.GetUsername() ?? throw new Exception("Cannot get username");
         var group = await unitOfWork.MessageRepository.GetMessageGroup(groupName);
-        var connection = new Connection{ConnectionId = Context.ConnectionId, Username = username};
+        var connection = new Connection { ConnectionId = Context.ConnectionId, Username = username };
 
         if (group == null)
         {
-            group = new Group{Name = groupName};
+            group = new Group { Name = groupName };
             unitOfWork.MessageRepository.AddGroup(group);
         }
 

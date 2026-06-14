@@ -58,10 +58,10 @@ public class MessageRepository(DataContext context, IMapper mapper) : IMessageRe
 
         query = messageParams.Container switch
         {
-            "Inbox" => query.Where(x => x.Recipient.UserName == messageParams.Username 
+            "Inbox" => query.Where(x => x.Recipient.UserName == messageParams.Username
                 && x.RecipientDeleted == false),
             "Outbox" => query.Where(x => x.Sender.UserName == messageParams.Username && x.SenderDeleted == false),
-            _ => query.Where(x => x.Recipient.UserName == messageParams.Username && x.DateRead == null 
+            _ => query.Where(x => x.Recipient.UserName == messageParams.Username && x.DateRead == null
                 && x.RecipientDeleted == false)
         };
 
@@ -73,14 +73,14 @@ public class MessageRepository(DataContext context, IMapper mapper) : IMessageRe
     public async Task<IEnumerable<MessageDto>> GetMessageThread(string currentUsername, string recipientUsername)
     {
         var query = context.Messages
-            .Where(x => 
+            .Where(x =>
                 x.RecipientUsername == currentUsername && x.RecipientDeleted == false && x.SenderUsername == recipientUsername ||
                 x.SenderUsername == currentUsername && x.SenderDeleted == false && x.RecipientUsername == recipientUsername
             )
             .OrderBy(x => x.MessageSent)
             .AsQueryable();
 
-        var unreadMessages = query.Where(x => x.DateRead == null && 
+        var unreadMessages = query.Where(x => x.DateRead == null &&
             x.RecipientUsername == currentUsername).ToList();
 
         if (unreadMessages.Count != 0)

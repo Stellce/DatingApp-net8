@@ -43,3 +43,12 @@
     animation: fa-blink 1.5s linear infinite;
     color: rgb(1,189,42);
 }
+
+.member-card {
+  overflow: hidden;
+}
+
+.card-img-top {
+  height: 260px;
+  object-fit: cover;
+}

@@ -3,7 +3,6 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { HasRoleDirective } from '../_directives/has-role.directive';
 
 @Component({
@@ -16,15 +15,13 @@ import { HasRoleDirective } from '../_directives/has-role.directive';
 export class NavComponent {
   accountService = inject(AccountService);
   private router = inject(Router);
-  private toastr = inject(ToastrService);
 
   login(f: NgForm) {
     this.accountService.login(f.form.value).subscribe({
       next: _ => {
         this.router.navigateByUrl("/members");
         f.reset();
-      },
-      error: err => this.toastr.error(err.error)
+      }
     }); 
   }
 
